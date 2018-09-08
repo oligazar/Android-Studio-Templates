@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<template
+    format="5"
+    revision="1"
+    name="SplashScreenActivity (Kotlin)"
+    description="Creates a SplashScreenActivity."
+    minApi="16"
+    minBuildApi="16">
+
+    <category value="Other" />
+
+    <dependency name="android-support-v4" revision="8" />
+
+    <parameter
+        id="className"
+        name="Activity Name"
+        type="string"
+        constraints="class|nonempty|unique"
+        default="SplashScreenActivity"
+        help="The name of the Activity class to create" />
+
+    <parameter
+        id="classToLaunchName"
+        name="Activity to launch Name"
+        type="string"
+        constraints="class|nonempty|unique"
+        default="MainActivity"
+        help="The name of the Activity that should be started from current one class to create" />
+
+    <parameter
+        id="isLauncher"
+        name="Launcher Activity"
+        type="boolean"
+        default="true"
+        help="If true, the activity will have a CATEGORY_LAUNCHER intent filter, making it visible in the launcher" />
+
+    <parameter
+        id="includeRx"
+        name="Include Rx?"
+        type="boolean"
+        default="false"
+        help="Add RxJava and RxAndroid in build.gradle" />
+
+    <thumbs>
+        <thumb>template_blank_fragment.png</thumb>
+    </thumbs>
+
+    <globals file="globals.xml.ftl" />
+    <execute file="recipe.xml.ftl" />
+
+</template>

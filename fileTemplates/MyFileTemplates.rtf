@@ -1,0 +1,177 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf470
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red255\green232\blue203;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 KotlinFragment (Kotlin)
+\b0 \
+\cb2 #if ($\{PACKAGE_NAME\} && $\{PACKAGE_NAME\} != "")package $\{PACKAGE_NAME\}\
+#end\
+\
+import android.os.Bundle\
+import android.provider.ContactsContract.Directory.PACKAGE_NAME\
+import android.support.v4.app.Fragment\
+import android.support.v7.app.AppCompatActivity\
+import android.view.LayoutInflater\
+import android.view.View\
+import android.view.ViewGroup\
+\
+#parse("File Header.java")\
+\
+class $\{NAME\}: Fragment() \{\
+\
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? \{\
+        super.onCreateView(inflater, container, savedInstanceState)\
+        val rootView = inflater?.inflate(R.layout.$\{layoutResId\}, container, false)\
+        return rootView\
+    \}\
+\
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) \{\
+        super.onViewCreated(view, savedInstanceState)\
+\
+        (activity as AppCompatActivity).setSupportActionBar($\{toolbarId\})\
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)\
+        (activity as AppCompatActivity).supportActionBar?.title = getString("$\{toolbarTitle\}")\
+    \}\
+\
+    companion object \{\
+        /**\
+         * The fragment argument representing the item ID that this fragment\
+         * represents.\
+         */\
+        val ARG_ITEM_ID = "item_id"\
+\
+        fun newInstance(itemId: String): TrackDetailFragment \{\
+            val fragment = TrackDetailFragment()\
+            val bundle = Bundle()\
+            bundle.putString(ARG_ITEM_ID, itemId)\
+            fragment.arguments = bundle\
+            return fragment\
+        \}\
+    \}\
+\}\
+
+\b \cb1 \
+RecyclerViewAdapter (Realm)\
+
+\b0 \cb2 #if ($\{PACKAGE_NAME\} && $\{PACKAGE_NAME\} != "")package $\{PACKAGE_NAME\};#end\
+\
+import android.support.v7.widget.RecyclerView\
+import android.view.LayoutInflater\
+import android.view.View\
+import android.view.ViewGroup\
+import android.widget.TextView\
+import io.realm.OrderedRealmCollection\
+import io.realm.RealmRecyclerViewAdapter\
+\
+class $\{MODEL_CLASS\}Adapter(items: OrderedRealmCollection<$\{MODEL_CLASS\}>, val onItemClick: (Int) -> Unit)\
+    : RealmRecyclerViewAdapter<Order, $\{MODEL_CLASS\}VH>(items, true) \{\
+\
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): $\{MODEL_CLASS\}yVH \{\
+        val itemView = LayoutInflater.from(parent?.context)\
+                .inflate(R.layout.$\{LAYOUT_RES_ID\}, parent, false)\
+        return $\{MODEL_CLASS\}VH(itemView)\
+    \}\
+\
+    override fun onBindViewHolder(holder: $\{MODEL_CLASS\}VH, position: Int) \{\
+        val model = getItem(position) ?: return\
+        //TODO Fill in your logic for binding the view.\
+    \}\
+\}\
+\
+class HistoryVH(view: View) : RecyclerView.ViewHolder(view) \{\
+    //TODO find view by id. Hint: use dyid live template\
+\}\
+
+\b \cb1 \
+RecyclerViewAdapter (Kotlin)\
+
+\b0 \cb2 #if ($\{PACKAGE_NAME\} && $\{PACKAGE_NAME\} != "")package $\{PACKAGE_NAME\};#end\
+\
+import android.support.v7.widget.RecyclerView\
+import android.view.LayoutInflater\
+import android.view.View\
+import android.view.ViewGroup\
+\
+#parse("File Header.java")\
+\
+class $\{MODEL_CLASS\}Adapter(private val items: ArrayList<$\{MODEL_CLASS\}>) : RecyclerView.Adapter<$\{MODEL_CLASS\}VH>() \{\
+\
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): $\{MODEL_CLASS\}VH \{\
+        val view = LayoutInflater.from(parent.context)\
+                .inflate(R.layout.$\{LAYOUT_RES_ID\}, parent, false)\
+        return $\{MODEL_CLASS\}VH(view)\
+    \}\
+\
+    override fun onBindViewHolder(holder: DeliveryOrderVH, position: Int) \{\
+        val item = items[position] ?: return\
+        //TODO Fill in your logic for binding the view.\
+    \}\
+\
+    override fun getItemCount() = items.size\
+\}\
+\
+class $\{MODEL_CLASS\}VH(view: View): RecyclerView.ViewHolder(view) \{\
+\
+    //TODO find view by id. Hint: use dyid live template\
+\}\
+
+\b \cb1 \
+ViewStateController\
+
+\b0 \cb2 #if ($\{PACKAGE_NAME\} && $\{PACKAGE_NAME\} != "")package $\{PACKAGE_NAME\};#end\
+\
+import android.view.Gravity\
+import android.widget.TextView\
+import android.widget.ViewAnimator\
+import com.russiacitypass.citypass.common.ViewStateController.ViewState.*\
+\
+#parse("File Header.java")\
+\
+\
+class ViewStateController(var myAnimator: ViewAnimator) \{\
+\
+    enum class ViewState \{\
+        DATA, LOADING, ERROR, EMPTY\
+    \}\
+\
+    val POSITION_DATA = 0\
+    val POSITION_LOADING = 1\
+    val POSITION_ERROR = 2\
+    val POSITION_EMPTY = 3\
+    var state = EMPTY\
+\
+    fun setEmptyText(text: String, gravityLeft: Boolean = false) \{\
+        if (POSITION_EMPTY >= myAnimator.childCount) return\
+        val emptyText = myAnimator.getChildAt(POSITION_EMPTY) as TextView\
+        emptyText.text = text\
+        if (gravityLeft) \{\
+            emptyText.gravity = Gravity.CENTER_VERTICAL /*and Gravity.LEFT*/\
+        \}\
+    \}\
+\
+    fun showLoading() \{\
+        if (state == DATA || state == LOADING) return\
+        state = LOADING\
+        myAnimator.displayedChild = POSITION_LOADING\
+    \}\
+\
+    fun showData() \{\
+        if (state == DATA) return\
+        state = DATA\
+        myAnimator.displayedChild = POSITION_DATA\
+    \}\
+\
+    fun showEmpty() \{\
+        if (state == DATA || POSITION_EMPTY >= myAnimator.childCount) return\
+        state = EMPTY\
+        myAnimator.displayedChild = POSITION_EMPTY\
+    \}\
+\
+    fun showError() \{\
+        if (state == DATA || state == ERROR) return\
+        state = ERROR\
+        myAnimator.displayedChild = POSITION_ERROR\
+    \}\
+\}}

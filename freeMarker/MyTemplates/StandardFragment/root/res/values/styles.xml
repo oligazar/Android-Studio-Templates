@@ -1,0 +1,8 @@
+
+<resources>
+    <style parent="ThemeOverlay.AppCompat.Dark.ActionBar" name="AppTheme.AppBarOverlay">
+        <!--theese two attributes set the toolbar'query icons, primary text and secondary text colors-->
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <item name="android:textColorSecondary">@color/colorText</item>
+    </style>
+</resources>
