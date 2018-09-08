@@ -66,9 +66,11 @@ class ${className} : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 <#if includeToolbar>
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.title_fragment)
+        appCompatActivity {
+            setSupportActionBar(toolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.title = getString(R.string.title_fragment)
+        }
 </#if>
 
 <#if includeFactory>
@@ -115,3 +117,11 @@ class ${className} : Fragment() {
     }
 </#if>
 }
+
+<#if includeToolbar>
+    // Allows to omit smth like (activity as? AppCompatActivity)?.setSupportActionbar(toolbar)
+    // instead appCompatActivity { setSupportActionBar(toolbar) }
+    inline fun Fragment.appCompatActivity(body: AppCompatActivity.() -> Unit) {
+        (activity as? AppCompatActivity)?.body()
+    }               
+</#if>
