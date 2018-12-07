@@ -4,6 +4,7 @@ package ${packageName}
 <#if includeCallbacks>import android.net.Uri</#if>
 import android.os.Bundle
 import android${SupportPackage}.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,24 +30,6 @@ import kotlinx.android.synthetic.main.${fragmentName}.*
  *
  */
 class ${className} : Fragment() {
-<#if includeFactory>
-
-    companion object {
-
-    // TODO: Rename parameter arguments, choose names that match
-        const val ARG_PARAM_STRING = "paramString"
-        const val ARG_PARAM_INT = "paramInt"
-
-        fun newInstance(paramString: String, paramInt: Int): ${className} {
-            val fragment = ${className}()
-            val args = Bundle()
-            args.putString(ARG_PARAM_STRING, paramString)
-            args.putInt(ARG_PARAM_INT, paramInt)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-</#if>
 
 <#if includeCallbacks>
     private var mListener: OnFragmentInteractionListener? = null
@@ -74,8 +57,9 @@ class ${className} : Fragment() {
 </#if>
 
 <#if includeFactory>
-        val mParamString = arguments?.getString(ARG_PARAM_STRING) ?: ""
-        val mParamInt = arguments?.getInt(ARG_PARAM_INT) ?: 0
+        /** param - is property of FragmentCreator. It returns received parameter 
+        * Warning: Use it only if create fabric method was used */
+        // val parameter = param
 </#if>
     }
 
@@ -115,6 +99,38 @@ class ${className} : Fragment() {
         // TODO: Update argument type and name
         fun onFragmentInteraction(uri: Uri)
     }
+</#if>
+
+<#if includeOptionsMenu>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    private val menuClear = 145
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        val item = menu?.add(Menu.NONE, menuClear, Menu.NONE, "Clear")
+        item?.setIcon(R.drawable.ic_clear_white)
+        item?.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+
+        inflater?.inflate(R.menu.menu_fragment_sms, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            menuClear -> { /* action */ }
+            R.id.menu_ok -> { /* action */ }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+</#if>
+
+<#if includeFactory>
+    /** Fragment Creator in FileTemplates of the New menu. Cacher also has FragmentCreator gist. */
+    companion object: FragmentCreator<Int>(::${className}) 
 </#if>
 }
 

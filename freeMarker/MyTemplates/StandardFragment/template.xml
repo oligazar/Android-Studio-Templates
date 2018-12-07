@@ -51,6 +51,13 @@
         help="Generate event callbacks for communication with an Activity or other fragments" />
 
     <parameter
+        id="includeOptionsMenu"
+        name="Include option menus?"
+        type="boolean"
+        default="false"
+        help="Generate options menu boilerplate code" />
+
+    <parameter
         id="includeToolbar"
         name="Include toolbar?"
         type="boolean"
